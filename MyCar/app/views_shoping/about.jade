@@ -1,0 +1,59 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-board.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+
+      
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    section#main.wrapper
+      .container
+        header.major
+          section.box  
+            div(class="about-box")
+              h3 안녕하세요. 
+              b MyCar
+              | 를 이용해 주셔서 감사합니다.
+              br
+              | 항상 더 나은 서비스를 제공하기 위해 노력하겠습니다.
+              br
+              | 앞으로도 저희 
+              b MyCar 
+              | 더욱 많은 이용 부탁드립니다.
+              h4 감사합니다.
+              
+              
+   div(class="footer")
+    | MyCar 개발자: 김성우 
+    | 대표번호: 02-0000-0000

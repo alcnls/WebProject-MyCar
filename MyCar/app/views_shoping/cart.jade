@@ -1,0 +1,163 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-board.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+    script.
+      function incomplete() {
+        alert("죄송합니다. 해당 서비스는 준비중입니다.");
+      }
+      
+      function plus(){
+        var count = document.getElementById("count").innerHTML;
+        var id = document.getElementById("id").innerHTML;
+        var result_count = parseInt(count) + 1;
+        
+        document.getElementById("count").innerHTML = result_count;
+        document.getElementById("result-count").innerHTML = result_count;
+        
+        var xmlhttp;
+        
+        var val;
+        
+        var data = "id="+id+"&count="+count;
+        if (window.XMLHttpRequest) { 
+          xmlhttp=new XMLHttpRequest();
+        } else {
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function() {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            if (result.result === 'false') {
+              alert(result.msg);
+              location.href = '/user/login';
+            }else{
+              alert(result.msg);
+            }
+          }
+        }
+        xmlhttp.open("POST","/cart",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send(data);
+      }
+      
+      function minus(){
+        
+      }
+    
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.username == 'alcnls')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    section#main.wrapper
+      .container
+        header.major
+          h2 장바구니 목록
+          section.box
+            #sidebar
+              if user
+                ul
+                  li
+                    div(class="cart-content-box")
+                      div(class="cart-product" id="cart-subject")
+                        | 상품
+                      div(class="cart-select" id="cart-select")
+                        | 가격선택  
+                      div(class="cart-price" id="cart-writer")
+                        | 가격
+                      div(class="cart-count" id="cart-time")  
+                        | 수량
+                if (!result)
+                  div(class="cart-content-box")
+                    br
+                    h3 장바구니가 비어있습니다.
+                    br
+                else            
+                  each cart in result                  
+                    ul
+                      li
+                        div(class="cart-content-box")
+                          div(class="cart-id" id="id" name="id") #{cart.id}
+                          div(class="cart-product" id="cart-subject")
+                            | #{cart.name}
+                          div(class="cart-select" id="cart-select")
+                            - function sub_price_string(sel) {
+                            - if (sel == 'lowprice') {
+                            -   return '최저가'; 
+                            - }else if(sel == 'highprice'){
+                            -   return '최고가'; 
+                            - } 
+                            -}
+                            | #{sub_price_string(cart.price)}
+                          div(class="cart-price" )
+                            - function sub_price(price) {
+                            - return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            -}
+                            if(cart.price == 'lowprice')
+                              div(id="price" name="price") #{sub_price(cart.lowprice)} 원
+                            else
+                              div(id="price" name="price") #{sub_price(cart.highprice)} 원
+                          div(class="cart-count")  
+                            div(class="cart-count-box")
+                              div(class="cart-m-box")
+                                a(class="cart-m" href="javascript:void(0);") -
+                              div(class="cart-count-text" id="count" name="count") #{cart.count}
+                              div(class="cart-p-box")
+                                a(class="cart-p" href="javascript:void(0);" onclick="") +
+                        
+                  ul
+                    li
+                      div(class="cart-content-box")
+                        div(class="cart-all-price-text" id="cart-all-price")
+                          | - 전체 가격 -
+                        div(class="cart-select" id="cart-select")
+                          
+                        div(class="cart-all-price" id="cart-price")
+                          - function sub_price(price) {
+                          - return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                          -}
+                          | #{sub_price(price)} 원
+                        div(class="cart-all-count" id="cart-count")  
+                          div(id="result-count") #{count}
+            
+            div(class="cart-button-box")          
+              input( class="input-submit"  value='전부 구매하기' type='button' onclick="incomplete()")  
+              a(class="cancel-input-submit" href="javascript:history.back();") 취소
+    div(class="footer")
+     | MyCar 개발자: 김성우 
+     | 대표번호: 02-0000-0000

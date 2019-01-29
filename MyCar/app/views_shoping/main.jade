@@ -1,0 +1,243 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+    script.
+  
+      function incomplete(){
+        alert("죄송합니다. 해당 서비스는 준비중입니다.");
+      }
+      
+      function search_text() {
+        var text = document.getElementById("searchtext");
+        var searchtext = text.value;
+        
+        location.href="/search?name="+searchtext;
+      }
+      
+      
+      function postAjaxText(id) {
+        var xmlhttp;
+        
+        var sel = document.getElementById("sel");
+        var val;
+        for(i=0; i<sel.options.length; i++) {
+          if(sel.options[i].selected == true) {
+              val = sel.options[i].value;
+              break;
+          }
+        }
+        
+        var data = "id="+id+"&price="+val;
+        if (window.XMLHttpRequest) { 
+          xmlhttp=new XMLHttpRequest();
+        } else {
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function() {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            if (result.result === 'false') {
+              alert(result.msg);
+              location.href = '/user/login';
+            }else{
+              alert(result.msg);
+            }
+          }
+        }
+        xmlhttp.open("POST","/cart",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send(data);
+      }
+    
+    
+    //- style.
+    //-   @media screen and (max-width: 980px){
+    //-     img.main-car-detail-img{
+    //-       height:30%;
+    //- 
+    //-     }
+    //-   }
+    
+  
+  body.landing
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.username == 'alcnls')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else    
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    section#banner
+      h2 MyCar  쇼핑의 즐거움! 
+      p 
+      ul.actions
+        if user
+          li
+            a.button.big(href='/user/edit/'+user.id) #{user.name}님 환영합니다!
+        else
+          li
+            a.button.big(href='/user/login') 로그인을 해주세요!    
+    section#one.wrapper.style1.special
+      .container
+        header.major
+          div(class="main-select-box")
+            a(class="main-a" href="/main/현대" ) 현대 
+            | | 
+            a(class="main-a" href="/main/기아" ) 기아 
+            | | 
+            a(class="main-a" href="/main/쌍용" ) 쌍용 
+            | | 
+            a(class="main-a" href="/main/르노삼성" ) 르노삼성
+            | | 
+            a(class="main-a" href="/main/쉐보레" ) 쉐보레
+            | | 
+            a(class="main-a" href="/main/볼보" ) 볼보
+            | | 
+            a(class="main-a" href="/main/BMW" ) BMW 
+            | | 
+            a(class="main-a" href="/main/아우디" ) 아우디
+            | | 
+            a(class="main-a" href="/main/벤츠" ) 벤츠
+            | | 
+            a(class="main-a" href="/main/재규어" ) 재규어
+            | | 
+            a(class="main-a" href="/main/람보르기니" ) 람보르기니
+          if brand    
+            div
+              a(href="/main/"+brand+"/소형") 소형 
+              | | 
+              a(href="/main/"+brand+"/준중형") 준중형 
+              | | 
+              a(href="/main/"+brand+"/중형") 중형 
+              | | 
+              a(href="/main/"+brand+"/대형") 대형 
+              | | 
+              a(href="/main/"+brand+"/SUV") SUV 
+          div(class="search-button")
+            input(class="search-text" placeholder="자동차 검색" name="searchtext" id="searchtext")
+            a(class="search-a" href="javascript:void(0);" onclick="search_text(); return false;") 검색
+          div(class="main-h2")  
+            h2 차량 정보
+            p MyCar, vehicle information
+      //- .row(class='150%')
+      //-   if result
+      //-     each car in result
+      //-       .4u(class='12u$(medium)')
+      //-         if car
+      //-           section.box
+      //-             a(href="/detail/"+car._id )
+      //-               img(class="main-car-detail-img" src=""+car.img width="100%")
+      //-               h3= car.name
+      //-               p 연비 - #{car.mileage}
+      //-               - function sub_price(price) {
+      //-               - return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      //-               - }
+      //-               if (car.lowprice == '정보없음')
+      //-                 div(class="price-color") 최저가 - #{sub_price(car.lowprice)} 
+      //-               else
+      //-                  div(class="price-color") 최저가 - #{sub_price(car.lowprice)} 원
+      //-               div(class="price-color")  최고가 - #{sub_price(car.highprice)} 원
+      //-             select(name="sel" id="sel")
+      //-               if (car.lowprice == '정보없음')
+      //-                 option(value="highprice") 최고가  
+      //-               else
+      //-                 option(value="lowprice") 최저가
+      //-                 option(value="highprice") 최고가  
+      //-             p(class="main-cart-p")
+      //-               input(type="button" value="구매하기" onclick="incomplete()")
+      //-               input( type="button" onclick="postAjaxText("+car._id+")" value="장바구니 담기")
+      //-   else
+      //-     div(class="main-information-p")
+      //-       h2 정보가 존재하지 않습니다.
+      div(class="main-box")
+        if result
+         div(class="main-body")
+          each car in result
+            if car
+              div(class="main-content")
+                a(href="/detail/"+car._id )
+                  img(class="main-car-detail-img" src=""+car.img width="100%")
+                  h3= car.name
+                  p 연비 - #{car.mileage}
+                  - function sub_price(price) {
+                  - return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  - }
+                  if (car.lowprice == '정보없음')
+                    div(class="price-color") 최저가 - #{sub_price(car.lowprice)} 
+                  else
+                     div(class="price-color") 최저가 - #{sub_price(car.lowprice)} 원
+                  div(class="price-color")  최고가 - #{sub_price(car.highprice)} 원
+                select(name="sel" id="sel")
+                  if (car.lowprice == '정보없음')
+                    option(value="highprice") 최고가  
+                  else
+                    option(value="lowprice") 최저가
+                    option(value="highprice") 최고가  
+                p(class="main-cart-p")
+                  input(type="button" value="구매하기" onclick="incomplete()")
+                  input( type="button" onclick="postAjaxText("+car._id+")" value="장바구니 담기")
+        else
+          div(class="main-information-p")
+            h2 정보가 존재하지 않습니다.
+          
+          
+    div(class="footer")
+     | MyCar 개발자: 김성우 
+     | 대표번호: 02-0000-0000  
+    
+    //- footer#footer
+    //-   .container  
+    //-     .row
+    //-       .8u(class='12u$(medium)')
+    //-         ul.copyright
+    //-           li © Untitled. All rights reserved.
+    //-           li
+    //-             | Design: 
+    //-             a(onclick="javascript:incomplete();") TEMPLATED
+    //-           li
+    //-             | Images: 
+    //-             a(onclick="javascript:incomplete();") Unsplash
+    //-       .8u(class='4u$ 12u$(medium)')
+    //-         ul.icons
+    //-           li
+    //-             a.icon.rounded.fa-facebook(onclick="javascript:incomplete();")
+    //-               span.label Facebook
+    //-           li
+    //-             a.icon.rounded.fa-twitter(onclick="javascript:incomplete();")
+    //-               span.label Twitter
+    //-           li
+    //-             a.icon.rounded.fa-google-plus(onclick="javascript:incomplete();")
+    //-               span.label Google+
+    //-           li
+    //-             a.icon.rounded.fa-linkedin(onclick="javascript:incomplete();")
+    //-               span.label LinkedIn

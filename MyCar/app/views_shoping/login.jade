@@ -1,0 +1,83 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+    
+      
+    script(language='javascript').
+  
+      function isNull(elm){
+       //Null 체크 함수
+       var elm;
+       return (elm == null || elm == "" || elm == "undefined" || elm == " ") ? true : false
+      }
+      
+      function ValidCheck() {
+        
+        var thisform = document.allForm;
+        if (isNull(thisform.username.value)) {
+          alert("내용을 입력해 주세요.");
+          thisform.username.value ="";
+          thisform.username.focus();
+          return false;
+        }else if (isNull(thisform.password.value)) {
+          alert("내용을 입력해 주세요.");
+          thisform.password.value ="";
+          thisform.password.focus();
+          return false;
+        }else{
+          return true;
+        }
+        
+      }
+      
+    
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.name == '운영자')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          li
+            a.button.special(href='/user/register') 회원가입 
+    section#main.wrapper
+      .container
+        header.major
+          h2 로그인
+          form(action="/user/login" method="post" name="allForm" onsubmit="return ValidCheck()")
+            div(class="signup-box")
+              p
+                h3 아이디
+                input(class="signup-input",name='username', value='', placeholder='아이디' type="text")
+              p
+                h3 비밀번호
+                input(class="signup-input",name='password', value='', placeholder='비밀번호' type="password")
+              if message
+                div(class="login-text") #{message}  
+                
+              input(class="input-submit" , value='로그인', type='submit')
+              a(class="cancel-input-submit" href="javascript:history.back();") 취소

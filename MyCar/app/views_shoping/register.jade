@@ -1,0 +1,133 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+      
+    script(language='javascript').
+     
+      var checked = false;
+      function isNull(elm){
+       //Null 체크 함수
+       var elm;
+       return (elm == null || elm == "" || elm == "undefined" || elm == " ") ? true : false
+      }
+      
+      function ValidCheck() {
+        
+        var thisform = document.allForm;
+        
+        if(isNull(thisform.name.value)){
+          alert("내용을 입력해 주세요.");
+          thisform.name.value ="";
+          thisform.name.focus();
+          return false;
+        }else if (isNull(thisform.username.value)) {
+          alert("내용을 입력해 주세요.");
+          thisform.username.value ="";
+          thisform.username.focus();
+          return false;
+        }else if (isNull(thisform.password.value)) {
+          alert("내용을 입력해 주세요.");
+          thisform.password.value ="";
+          thisform.password.focus();
+          return false;
+        }else if (checked == false) {
+          console.log("중복2");
+          alert("중복확인을 확인해 주세요.");
+          return false;
+        }else if(checked == true){
+          console.log(checked);
+          return true;
+        }
+      }
+      
+      function postAjaxText() {
+        var xmlhttp;
+        var thisform = document.allForm;
+        var username = document.getElementById("username").value;
+        if (isNull(username)) {
+          alert("아이디를 입력해 주세요.");
+          thisform.username.value ="";
+          thisform.username.focus();
+          return;
+        }
+        var data = "username="+username;
+        if (window.XMLHttpRequest) { 
+          xmlhttp=new XMLHttpRequest();
+        } else {
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function() {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            if (result.result === 'false') {
+              checked = false;
+              console.log(checked);
+              document.getElementById("myText").innerHTML="";
+              document.getElementById("myText").innerHTML=result.msg;
+              document.getElementById("myText").style.color="red";
+            }else{
+              checked = true;
+              console.log(checked);
+              document.getElementById("myText").innerHTML="";
+              document.getElementById("myText").innerHTML=result.msg;  
+              document.getElementById("myText").style.color="blue";
+            }
+          }
+        }
+        xmlhttp.open("POST","check",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send(data);
+      }
+
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.name == '운영자')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          li
+            a.button.special(href='/user/login') 로그인  
+    section#main.wrapper
+      .container
+        header.major
+          h2 회원가입
+          form(action="/user/register" method="post" name="allForm" onsubmit="return ValidCheck()")
+            div(class="signup-box")
+              p
+                h3 이름
+                input(class="signup-input",name='name', value='', placeholder='이름' type="text")
+              p
+                h3 아이디
+                input(class="signup-input",id="username",name='username', placeholder='아이디' type="text")
+                div(id="myText")
+                input(class="input-submit", type="button" value="중복확인" onclick="postAjaxText()")
+              p
+                h3 비밀번호
+                input(class="signup-input",name='password', value='', placeholder='비밀번호' type="password")
+              input(class="input-submit", value='가입하기', type='submit')
+              a(class="cancel-input-submit", href="javascript:history.back();") 취소
