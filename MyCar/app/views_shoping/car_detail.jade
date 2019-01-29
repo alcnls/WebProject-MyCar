@@ -1,0 +1,109 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-board.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+
+      
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.name == '운영자')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    // Main
+    section#main.wrapper
+      .container
+        header.major
+          
+      section.box      
+        div(class="car-detail-all-box")
+          div(class="car-detail-img-box")
+            img(class="car-detail-img" ,src=""+cars.img , alt='/shoping/images/pic07.jpg' )
+          div(class="car-detail-content-box")
+            p
+              h2 #{cars.name}
+              h3 #{cars.brand}자동차
+              p
+                | #{cars.type} | #{cars.class}
+            
+            br
+            hr
+            p
+              - function sub_price(price) {
+              - return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              - }
+              h3(class="test") 최저가 - #{sub_price(cars.lowprice)}원
+              h3(class="test") 최고가 - #{sub_price(cars.highprice)}원
+              | 모델 - #{cars.model}
+            p
+              | 배기량 - #{cars.cc}  
+            p
+              | 연비 - #{cars.mileage}
+            p
+              | 최대출력 - #{cars.output}
+              
+        div(class="car-detail-content-box")      
+          if cars_class
+            h3 같은 등급 자동차
+            hr
+            each cars in cars_class
+              p
+                h4 #{cars.name}
+                | #{cars.class}
+                br
+                | 모델 - #{cars.model}
+                br
+                | 배기량 - #{cars.cc}
+                br
+                | 연비 - #{cars.mileage}
+                br
+                | 출력 - #{cars.output}
+                br
+                - function sub_price(price) {
+                - return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                - }
+                | 가격 - #{sub_price(cars.highprice)}만원
+                hr  
+            if user
+              if (user.name == '운영자')
+                a(href="/car/update/"+cars._id) 차량 정보 수정
+          
+    // Footer
+    div(class="footer")
+     | MyCar 개발자: 김성우 
+     | 대표번호: 02-0000-0000
+     
+     

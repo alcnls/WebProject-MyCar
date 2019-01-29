@@ -1,0 +1,138 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-board.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+    script.
+  
+      //- window.onpageshow = function(event) {
+      //-   //blah blah blah
+      //-   if (event.persisted) {
+      //-     alert('asdfasdf');
+      //-   }else{
+      //- 
+      //-   }
+      //- 
+      //- }
+      
+      history.pushState(null, null, location.href); 
+        window.onpopstate = function(event) { 
+        // 뒤로가기 이벤트 작성 history.go(1);
+          location.href= '/board';
+        }
+  
+      function board_delete(id) {
+        var con_test = confirm("정말 삭제 하시겠습니까?");
+        if(con_test == true){
+          location.href = '/board/delete/'+id;
+        }
+      }
+      
+      function board_update(id) {
+        var con_test = confirm("정말 수정 하시겠습니까?");
+        if(con_test == true){
+          location.href = '/board/update/'+id;
+        }
+      }
+  
+      
+    
+    body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.name == '운영자')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    section#main.wrapper
+      .container
+        header.major
+        section.box
+          #sidebar
+            ul
+              li
+                h2 글 정보    
+                li  
+                  div(class="board-detail-box")
+                    div(class="board-detail-subject")
+                      | 제목
+                    div(class="board-detail-subject-c")
+                      | #{board.subject}
+                  div(class="")    
+                    div(class="board-detail-subject")
+                        | 작성자
+                    div(class="board-detail-subject-c")
+                        | #{board.user_id}  
+                ul      
+                  li
+                    div(class="board-detail-box")
+                      div(class="board-detail-time")
+                        | 등록일
+                      div(class="board-detail-time-c")
+                        -function prettyDate(dateString){
+                        //if it's already a date object and not a string you don't need this line:
+                        -var date = new Date(dateString);
+                        -var d = date.getDate();
+                        -var monthNames = [ "1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11", "12" ];
+                        -var m = monthNames[date.getMonth()];
+                        -var y = date.getFullYear();
+                        -return y+'-'+m+'-'+d;
+                        -}
+                          | #{prettyDate(board.reg_date)}
+                      div(class="board-detail-time")
+                        | 조회수
+                      div(class="board-detail-time-c")
+                        | #{board.hit}
+                ul      
+                  li
+                    div(class="board-detail-content-box")
+                      div(class="board-detail-content")
+                        | #{board.content}
+                        
+                
+                  li
+                    div(class="board-detail-button-box")
+                      a(class="board-detail-a" href="/board") 목록
+                      if user
+                        if(board.user_id == user.username) 
+                          a(class="board-detail-a" href='javascript:void(0);' onclick="board_update("+board.id+"); return false;") 수정
+                          a(class="board-detail-a" href='javascript:void(0);' onclick="board_delete("+board.id+"); return false;") 삭제
+          // end #sidebar
+          div(style='clear: both;')  
+            
+        
+            
+            
+            
+            

@@ -1,0 +1,181 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-board.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+    //- script.
+    //-   function getDisplayInfo() {
+    //- 
+    //-     var size = {
+    //-       width: window.innerWidth || document.body.clientWidth,
+    //-       height: window.innerHeight || document.body.clientHeight
+    //-     }
+    //-     var time = document.getElementById("board-time");
+    //-     var content_time = document.getElementById("board-content-time");
+    //-     var writer = document.getElementById("board-writer");
+    //- 
+    //-     var box = document.getElementById("board-box");
+    //- 
+    //-     if (size.width < 900) {
+    //-       time.remove();
+    //-       content_time.remove();
+    //- 
+    //-     }
+    //- 
+    //-     var subject = document.getElementById("board-subject");
+    //-     subject.innerHTML = size.width;
+    //-     //- var w = document.getElementById("dispWidth");
+    //-     //- var h = document.getElementById("dispHeight");
+    //-     //- w.innerHTML = size.width;
+    //-     //- h.innerHTML = size.height;
+    //-   }
+    //- 
+    //-   window.onload = getDisplayInfo;
+    script.
+      function login_check() {
+        alert("로그인이 필요한 서비스 입니다.");
+        location.href = '/user/login';
+      }
+    
+    
+    style.
+      @media screen and (max-width: 900px){
+        div.board.subject{
+          width:80%;
+        }
+        div.board.writer{
+          width: 20%;
+        }
+        div.board-time{
+          display:none;
+          width:0px;
+        
+        }
+        
+      }
+      
+      @media screen and (max-width: 600px){
+        div.board.subject{
+          width:100%;
+        }
+        div.board-writer{
+          display:none;
+          width:0px;
+        }
+        div.board-time{
+          display:none;
+          width:0px;
+        }
+      }
+      
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.name == '운영자')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    section#main.wrapper
+      .container
+        header.major
+          h2 게시판
+        section.box
+          #sidebar
+            ul
+              li
+                h2 자유게시판
+                li
+                  div(class="board-box")
+                    div(class="board-number" id="board-number")
+                      | 번호
+                    div(class="board-subject" id="board-subject")
+                      | 제목
+                    div(class="board-writer" id="board-writer")
+                      | 작성자
+                    div(class="board-time" id="board-time")  
+                      | 등록일
+                    div(class="board-hit" id="board-hit")  
+                      | 조회수  
+                ul
+                  li
+                    div(class="board-box") 
+                      div(class="board-number")
+                        | 0
+                      div(class="board-subject")
+                        a(href='#') [공지사항] 안녕하세요. MyCar를 이용해 주셔서 감사합니다.
+                      div(class="board-writer" id="board-writer")
+                        | 운영자
+                      div(class="board-time" id="board-content-time")  
+                        | 2018-5-16        
+                      div(class="board-hit" id="board-hit")
+                        | 0
+                  each board in result 
+                    li
+                      div(class="board-box") 
+                        div(class="board-number")
+                          | #{board.id}
+                        div(class="board-subject")
+                          a(href='/board/'+board.id) #{board.subject}
+                        div(class="board-writer" id="board-writer")
+                          a(href='#') #{board.user_id}
+                        div(class="board-time" id="board-content-time")  
+                          -function prettyDate(dateString){
+                          //if it's already a date object and not a string you don't need this line:
+                          -var date = new Date(dateString);
+                          -var d = date.getDate();
+                          -var monthNames = [ "1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11", "12" ];
+                          -var m = monthNames[date.getMonth()];
+                          -var y = date.getFullYear();
+                          -return y+'-'+m+'-'+d;
+                          -}
+                            | #{prettyDate(board.reg_date)}        
+                        div(class="board-hit" id="board-hit")
+                          | #{board.hit}
+              p
+                if user
+                  a.button.special(href='/board/add') 글쓰기
+                else
+                  a.button.special(href='javascript:void(0);' onclick="login_check(); return false;") 글쓰기
+          // end #sidebar
+          div(style='clear: both;')  
+    div(class="footer")
+     | MyCar 개발자: 김성우 
+     | 대표번호: 02-0000-0000
+
+        
+        
+            
+            
+            
+            

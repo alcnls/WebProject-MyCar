@@ -1,0 +1,84 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title MyCar 쇼핑의 즐거움!
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(rel='stylesheet', href='/shoping/css/skel.css')
+    link(rel='stylesheet', href='/shoping/css/style.css')
+    link(rel='stylesheet', href='/shoping/css/style-board.css')
+    link(rel='stylesheet', href='/shoping/css/style-xlarge.css')
+    script(src='/shoping/js/jquery.min.js')
+    script(src='/shoping/js/skel.min.js')
+    script(src='/shoping/js/skel-layers.min.js')
+    script(src='/shoping/js/init.js')
+
+      
+  body
+    // Header
+    header#header
+      h1
+        a(href='/main') MyCar
+      nav#nav
+        ul
+          li
+            a(href='/main') 홈
+          li
+            if user
+              if (user.name == '운영자')
+                a(href="/car/add") 차량 추가 
+              else
+                a(href='/cart') 장바구니
+            else  
+              a(href='/about') 소개
+          li
+            a(href='/board') 게시판
+          if user
+            li
+              a.button.special(href='/user/logout') 로그아웃
+          else
+            li
+              a.button.special(href='/user/login') 로그인
+            li
+              a.button.special(href='/user/register') 회원가입
+    section#main.wrapper
+      .container
+        header.major
+          form(action="/car/update/"+result._id method="post")
+            p
+              | type 
+              input(type="text" value=""+result.type , placeholder='국산..' name="type")
+            p
+              | brand
+              input(type="text" value=""+result.brand  placeholder='현대..' name="brand")
+            p
+              | class
+              input(type="text" value=""+result.class placeholder='준중형..' name="size")
+            p
+              | cc
+              input(type="text" value=""+result.cc placeholder='1,582~1,591cc..' name="cc")
+            p
+              | model
+              input(type="text" value=""+result.model placeholder='가솔린..' name="model")
+            p
+              | name
+              input(type="text" value=""+result.name placeholder='아반떼..' name="name")
+            p
+              | lowprice
+              input(type="text" value=""+result.lowprice placeholder='1,420~2,427..' name="lowprice")
+            p
+              | highprice
+              input(type="text" value=""+result.highprice placeholder='1,420~2,427..' name="highprice")  
+            p
+              | output
+              input(type="text" value=""+result.output placeholder='120~136hp..' name="output")
+            p
+              | mileage
+              input(type="text" value=""+result.mileage placeholder='10.6~18.4km..' name="mileage")
+            p
+              | img
+              input(type="text" value=""+result.img placeholder='image..' name="img")
+            p
+              input(type="submit")
