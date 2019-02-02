@@ -14,6 +14,8 @@ DB
 
 	MySQL
 
-
+#### 메인 화면
 ![main](./images/main.png)
+
+#### 게시판 화면
 ![자유게시판](./images/자유게시판.png)
