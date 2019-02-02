@@ -17,6 +17,9 @@ DB
 #### 메인 화면
 ![main](./images/main.png)
 
+#### 상품 상세 화면
+![상품상세](./images/상품상세.png)
+
 #### 게시판 화면
 ![게시판](./images/게시판.png)
 
