@@ -18,7 +18,7 @@ DB
 ![main](./images/main.png)
 
 #### 게시판 화면
-![자유게시판](./images/자유게시판.png)
+![게시판](./images/게시판.png)
 
-#### 게시판 화면
+#### 게시판 글정보 화면
 ![글정보](./images/글정보.png)
